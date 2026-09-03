@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: ad134f0fe24be9b468066b2eb741be1c
+timeCreated: 1585525442
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 177897
+  packageName: Find The Hole - Hyper Casual Game
+  packageVersion: 1.0
+  assetPath: Assets/Rolling Maze/Prefab/Sound.prefab
+  uploadId: 387482

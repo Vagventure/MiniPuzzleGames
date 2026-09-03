@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ec8276a9015c64e498502ba2e8f57cd7
+timeCreated: 1581815970
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 177897
+  packageName: Find The Hole - Hyper Casual Game
+  packageVersion: 1.0
+  assetPath: Assets/Rolling Maze/Scenes/mainMenu.unity
+  uploadId: 387482

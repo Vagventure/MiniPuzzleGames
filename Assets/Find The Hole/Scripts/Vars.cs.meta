@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 897d936c43488d54f9a3bb47a3cb2edb
+timeCreated: 1585438815
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 177897
+  packageName: Find The Hole - Hyper Casual Game
+  packageVersion: 1.0
+  assetPath: Assets/Find The Hole/Scripts/Vars.cs
+  uploadId: 387482

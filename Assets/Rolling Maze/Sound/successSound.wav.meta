@@ -1,0 +1,30 @@
+fileFormatVersion: 2
+guid: 2f856af8972a440a8524bfab0d3f2f3c
+timeCreated: 1585442095
+licenseType: Store
+AudioImporter:
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 0
+    sampleRateSetting: 0
+    sampleRateOverride: 44100
+    compressionFormat: 1
+    quality: 1
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  normalize: 1
+  preloadAudioData: 1
+  loadInBackground: 0
+  ambisonic: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 165903
+  packageName: Rolling Maze - balls rotate - complete project puzzle game template
+  packageVersion: 1.0
+  assetPath: Assets/Rolling Maze/Sound/successSound.wav
+  uploadId: 360590

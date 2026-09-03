@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 48191ae95ed3494439e5d092e5152bf0
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 232058
+  packageName: Connect Balls - Complete Game
+  packageVersion: 1.0
+  assetPath: Assets/Connect Balls/Material/LoveParticle.mat
+  uploadId: 524172

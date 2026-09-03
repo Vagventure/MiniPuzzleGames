@@ -1,0 +1,30 @@
+fileFormatVersion: 2
+guid: 1c863c6f1a023184fb9345bb5d4b5a58
+timeCreated: 1585504709
+licenseType: Store
+AudioImporter:
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 0
+    sampleRateSetting: 0
+    sampleRateOverride: 44100
+    compressionFormat: 1
+    quality: 1
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  normalize: 1
+  preloadAudioData: 1
+  loadInBackground: 0
+  ambisonic: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 177897
+  packageName: Find The Hole - Hyper Casual Game
+  packageVersion: 1.0
+  assetPath: Assets/Find The Hole/Sound/levelLocked.wav
+  uploadId: 387482

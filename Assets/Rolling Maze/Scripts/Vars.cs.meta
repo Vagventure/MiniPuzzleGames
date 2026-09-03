@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: b7d04021ef5a4343b046fbff94b7bb3d
+timeCreated: 1585438815
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 165903
+  packageName: Rolling Maze - balls rotate - complete project puzzle game template
+  packageVersion: 1.0
+  assetPath: Assets/Rolling Maze/Scripts/Vars.cs
+  uploadId: 360590

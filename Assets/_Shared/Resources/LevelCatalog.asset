@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f24c6a4dcdd7a74e9edff62baec7cec, type: 3}
+  m_Name: LevelCatalog
+  m_EditorClassIdentifier: Assembly-CSharp::PuzzleGame.Core.LevelCatalog
+  chapters:
+  - gameId: 1
+    displayName: Connect Balls
+    sceneFolder: Assets/Connect Balls/Scenes/Levels
+    firstNumber: 1
+    levelCount: 60
+    explicitSceneNames: []
+    background: {fileID: 0}
+  - gameId: 2
+    displayName: Find The Hole
+    sceneFolder: Assets/Find The Hole/Scenes/Levels
+    firstNumber: 1
+    levelCount: 51
+    explicitSceneNames: []
+    background: {fileID: 0}
+  - gameId: 3
+    displayName: Rolling Maze
+    sceneFolder: Assets/Rolling Maze/Scenes/Levels
+    firstNumber: 1
+    levelCount: 51
+    explicitSceneNames: []
+    background: {fileID: 0}

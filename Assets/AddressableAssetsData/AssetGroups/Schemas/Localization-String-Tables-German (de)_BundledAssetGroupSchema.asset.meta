@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 82d91bd62beca1143b75af9c358b1eaf
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 328365
+  packageName: "Fruit Slide \u2013 Complete Puzzle Game Template - Mobile Ready"
+  packageVersion: 1.0
+  assetPath: Assets/AddressableAssetsData/AssetGroups/Schemas/Localization-String-Tables-German
+    (de)_BundledAssetGroupSchema.asset
+  uploadId: 777309

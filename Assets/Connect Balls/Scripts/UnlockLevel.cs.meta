@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: f1a9af55d98e21c4b855000272fd88b0
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 232058
+  packageName: Connect Balls - Complete Game
+  packageVersion: 1.0
+  assetPath: Assets/Connect Balls/Scripts/UnlockLevel.cs
+  uploadId: 524172

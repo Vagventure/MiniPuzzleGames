@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 5ba649a79f467d4459ab9294895603d3
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 232058
+  packageName: Connect Balls - Complete Game
+  packageVersion: 1.0
+  assetPath: Assets/Connect Balls/Scripts/Tutorial.cs
+  uploadId: 524172

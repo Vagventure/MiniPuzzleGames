@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 367c5e5543574f35aa3b6f5d11b22b43
+timeCreated: 1581013676
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 165903
+  packageName: Rolling Maze - balls rotate - complete project puzzle game template
+  packageVersion: 1.0
+  assetPath: Assets/Rolling Maze/Scenes/Levels/30.unity
+  uploadId: 360590

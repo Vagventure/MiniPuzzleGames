@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: de83221bf076a9e4c93fc17fac14593f
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 259788
+  packageName: Wrecking Balls - Hyper Casual Game For Android And iOS
+  packageVersion: 1.0
+  assetPath: Assets/UniversalRenderPipelineGlobalSettings.asset
+  uploadId: 640243

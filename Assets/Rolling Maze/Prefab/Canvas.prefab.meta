@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: c4783ff3a8084845aa487eefd150c21f
+timeCreated: 1582234926
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 165903
+  packageName: Rolling Maze - balls rotate - complete project puzzle game template
+  packageVersion: 1.0
+  assetPath: Assets/Rolling Maze/Prefab/Canvas.prefab
+  uploadId: 360590

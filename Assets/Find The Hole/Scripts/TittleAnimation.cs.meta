@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 7873ecb70cd2a054c867acb4ebee33fc
+timeCreated: 1584319966
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 177897
+  packageName: Find The Hole - Hyper Casual Game
+  packageVersion: 1.0
+  assetPath: Assets/Find The Hole/Scripts/TittleAnimation.cs
+  uploadId: 387482

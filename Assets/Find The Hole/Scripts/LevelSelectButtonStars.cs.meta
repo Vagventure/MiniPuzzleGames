@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 7245cb5ba5a6351469047e6b48e9f333
+timeCreated: 1585525951
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 177897
+  packageName: Find The Hole - Hyper Casual Game
+  packageVersion: 1.0
+  assetPath: Assets/Find The Hole/Scripts/LevelSelectButtonStars.cs
+  uploadId: 387482

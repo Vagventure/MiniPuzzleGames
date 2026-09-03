@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: b30709113d1fe5b4aac2173e94d7e42a
+timeCreated: 1585503349
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 177897
+  packageName: Find The Hole - Hyper Casual Game
+  packageVersion: 1.0
+  assetPath: Assets/Find The Hole/Scripts/StarFrame.cs
+  uploadId: 387482
