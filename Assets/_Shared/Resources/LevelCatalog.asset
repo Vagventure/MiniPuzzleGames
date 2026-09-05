@@ -12,25 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f24c6a4dcdd7a74e9edff62baec7cec, type: 3}
   m_Name: LevelCatalog
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleGame.Core.LevelCatalog
+  interleaveBlockSize: 5
   chapters:
   - gameId: 1
     displayName: Connect Balls
     sceneFolder: Assets/Connect Balls/Scenes/Levels
-    firstNumber: 1
-    levelCount: 60
+    firstNumber: 6
+    levelCount: 55
     explicitSceneNames: []
     background: {fileID: 0}
   - gameId: 2
     displayName: Find The Hole
     sceneFolder: Assets/Find The Hole/Scenes/Levels
-    firstNumber: 1
-    levelCount: 51
+    firstNumber: 6
+    levelCount: 46
     explicitSceneNames: []
     background: {fileID: 0}
   - gameId: 3
     displayName: Rolling Maze
     sceneFolder: Assets/Rolling Maze/Scenes/Levels
-    firstNumber: 1
-    levelCount: 51
+    firstNumber: 6
+    levelCount: 46
     explicitSceneNames: []
     background: {fileID: 0}

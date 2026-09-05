@@ -85,7 +85,15 @@ namespace PuzzleGame.Core
         [SerializeField]
         private List<Chapter> chapters = new List<Chapter>();
 
+        [Tooltip("Play order across mini-games. 0 = finish one game's whole chapter before " +
+                 "starting the next (old behaviour). N>0 = round-robin N levels of each game " +
+                 "at a time, in chapter array order, cycling until every chapter is finished " +
+                 "(a chapter just drops out of the rotation once it runs out).")]
+        [SerializeField]
+        private int interleaveBlockSize = 5;
+
         public IReadOnlyList<Chapter> Chapters => chapters;
+        public int InterleaveBlockSize => interleaveBlockSize;
 
         // ------------------------------------------------------------------
         // Resolved (flattened) sequence — rebuilt lazily from the chapters.
@@ -106,34 +114,68 @@ namespace PuzzleGame.Core
         public void Rebuild()
         {
             _flat = new List<LevelRef>(128);
-            int global = 0;
 
+            // Prepare each non-empty chapter's ordered scene-name list up front, so
+            // ChapterLevelNumber/ChapterLevelCount always reflect the chapter's real length —
+            // regardless of whether we play it in one block or interleaved in slices.
+            var prepared = new List<(Chapter ch, List<string> names)>();
             foreach (var ch in chapters)
             {
-                if (ch == null || ch.levelCount <= 0 && (ch.explicitSceneNames == null || ch.explicitSceneNames.Length == 0))
-                    continue;
+                if (ch == null) continue;
+                var names = new List<string>(ch.SceneNames());
+                if (names.Count == 0) continue;
+                prepared.Add((ch, names));
+            }
 
-                var names = new List<string>();
-                foreach (var n in ch.SceneNames()) names.Add(n);
+            int global = 0;
+            int block = Mathf.Max(0, interleaveBlockSize);
 
-                for (int i = 0; i < names.Count; i++)
+            if (block <= 0)
+            {
+                // sequential: whole chapters back to back
+                foreach (var (ch, names) in prepared)
+                    for (int i = 0; i < names.Count; i++)
+                        _flat.Add(MakeRef(ref global, ch, names, i));
+                return;
+            }
+
+            // round-robin: up to `block` levels of each chapter per pass, in array order,
+            // skipping chapters once they run out, until all are exhausted.
+            var cursor = new int[prepared.Count];
+            bool progressed = true;
+            while (progressed)
+            {
+                progressed = false;
+                for (int c = 0; c < prepared.Count; c++)
                 {
-                    global++;
-                    string sceneName = names[i];
-                    string path = string.IsNullOrEmpty(ch.sceneFolder)
-                        ? sceneName
-                        : $"{ch.sceneFolder.TrimEnd('/')}/{sceneName}.unity";
+                    var (ch, names) = prepared[c];
+                    if (cursor[c] >= names.Count) continue;
+                    progressed = true;
 
-                    _flat.Add(new LevelRef(
-                        globalIndex: global,
-                        game: ch.gameId,
-                        chapterName: string.IsNullOrEmpty(ch.displayName) ? ch.gameId.ToString() : ch.displayName,
-                        chapterLevelNumber: i + 1,
-                        chapterLevelCount: names.Count,
-                        sceneName: sceneName,
-                        scenePath: path));
+                    int end = Mathf.Min(cursor[c] + block, names.Count);
+                    for (int i = cursor[c]; i < end; i++)
+                        _flat.Add(MakeRef(ref global, ch, names, i));
+                    cursor[c] = end;
                 }
             }
+        }
+
+        private static LevelRef MakeRef(ref int global, Chapter ch, List<string> names, int i)
+        {
+            global++;
+            string sceneName = names[i];
+            string path = string.IsNullOrEmpty(ch.sceneFolder)
+                ? sceneName
+                : $"{ch.sceneFolder.TrimEnd('/')}/{sceneName}.unity";
+
+            return new LevelRef(
+                globalIndex: global,
+                game: ch.gameId,
+                chapterName: string.IsNullOrEmpty(ch.displayName) ? ch.gameId.ToString() : ch.displayName,
+                chapterLevelNumber: i + 1,
+                chapterLevelCount: names.Count,
+                sceneName: sceneName,
+                scenePath: path);
         }
 
         /// <summary>1-based lookup. Returns an invalid ref if out of range.</summary>
@@ -166,31 +208,33 @@ namespace PuzzleGame.Core
         public static LevelCatalog BuildDefault()
         {
             var c = CreateInstance<LevelCatalog>();
+            c.interleaveBlockSize = 5;
             c.chapters = new List<Chapter>
             {
+                // First 5 levels of each pack are cut (too easy / tutorial-ish) — start at 6.
                 new Chapter
                 {
                     gameId = GameId.ConnectBalls,
                     displayName = "Connect Balls",
                     sceneFolder = "Assets/Connect Balls/Scenes/Levels",
-                    firstNumber = 1,
-                    levelCount = 60,
+                    firstNumber = 6,
+                    levelCount = 55,
                 },
                 new Chapter
                 {
                     gameId = GameId.FindTheHole,
                     displayName = "Find The Hole",
                     sceneFolder = "Assets/Find The Hole/Scenes/Levels",
-                    firstNumber = 1,
-                    levelCount = 51,
+                    firstNumber = 6,
+                    levelCount = 46,
                 },
                 new Chapter
                 {
                     gameId = GameId.RollingMaze,
                     displayName = "Rolling Maze",
                     sceneFolder = "Assets/Rolling Maze/Scenes/Levels",
-                    firstNumber = 1,
-                    levelCount = 0, // filled in once the pack is imported
+                    firstNumber = 6,
+                    levelCount = 46,
                 },
             };
             c.Rebuild();

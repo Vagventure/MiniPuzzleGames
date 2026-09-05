@@ -210,6 +210,18 @@ namespace PuzzleGame.Core
             if (crossingChapter && ShowChapterIntro && SharedUIReference != null)
             {
                 var from = Current.Game;
+
+                if (catalog.InterleaveBlockSize > 0)
+                {
+                    // Interleaved play: a chapter switch happens every few levels, so a
+                    // blocking "tap to continue" card would be constant noise. Flash a quick
+                    // non-blocking banner during the load instead and keep moving.
+                    ChapterChanged?.Invoke(from, upcoming.Game);
+                    SharedUIReference.FlashChapterBanner(upcoming.ChapterName);
+                    LoadLevel(next);
+                    return;
+                }
+
                 SharedUIReference.ShowChapterIntro(
                     finishedChapter: Current.ChapterName,
                     nextChapter: upcoming.ChapterName,

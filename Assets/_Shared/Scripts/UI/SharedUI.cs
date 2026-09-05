@@ -46,6 +46,11 @@ namespace PuzzleGame.UI
         private GameObject _starsRoot;
         private Text[] _stars;
 
+        // quick non-blocking "NOW PLAYING: X" banner shown over the fade during interleaved
+        // chapter switches (see LevelFlowController.RequestNextLevel)
+        private Text _transitionLabel;
+        private string _pendingBanner;
+
         private static float FadeDuration => Mathf.Max(0f, GameConfig.Instance.fadeDuration);
 
         private void Awake()
@@ -105,6 +110,10 @@ namespace PuzzleGame.UI
             StopAllCoroutines();
             StartCoroutine(CoCoverThenLoad(load));
         }
+
+        /// <summary>Queue a "NOW PLAYING: chapterName" banner to flash over the fade the next
+        /// time <see cref="CoverThenLoad"/> runs. Non-blocking — does not pause progression.</summary>
+        public void FlashChapterBanner(string chapterName) => _pendingBanner = chapterName;
 
         public void ShowChapterIntro(string finishedChapter, string nextChapter, Action onContinue)
         {
@@ -169,6 +178,15 @@ namespace PuzzleGame.UI
             _fade.transform.SetAsLastSibling();
             _fade.raycastTarget = true;
             yield return Fade(1f);
+
+            if (!string.IsNullOrEmpty(_pendingBanner))
+            {
+                _transitionLabel.text = _pendingBanner.ToUpperInvariant();
+                _pendingBanner = null;
+                _transitionLabel.transform.SetAsLastSibling(); // on top of the opaque fade
+                _transitionLabel.gameObject.SetActive(true);
+            }
+
             _pendingUncover = true;
             load?.Invoke();
             // uncover is triggered from OnSceneLoadedRaw once the new scene finishes loading
@@ -213,8 +231,14 @@ namespace PuzzleGame.UI
             {
                 _pendingUncover = false;
                 StopAllCoroutines();
-                StartCoroutine(Fade(0f));
+                StartCoroutine(CoUncover());
             }
+        }
+
+        private IEnumerator CoUncover()
+        {
+            yield return Fade(0f);
+            if (_transitionLabel != null) _transitionLabel.gameObject.SetActive(false);
         }
 
         private void OnLevelLoaded(LevelCatalog.LevelRef level)
@@ -279,6 +303,17 @@ namespace PuzzleGame.UI
             _fade = go.AddComponent<Image>();
             _fade.color = new Color(0f, 0f, 0f, 0f);
             _fade.raycastTarget = false;
+
+            var labelGo = NewUiObject("TransitionLabel", _canvas.transform);
+            Stretch(labelGo.GetComponent<RectTransform>());
+            _transitionLabel = labelGo.AddComponent<Text>();
+            _transitionLabel.font = LegacyFont();
+            _transitionLabel.fontSize = 56;
+            _transitionLabel.fontStyle = FontStyle.Bold;
+            _transitionLabel.alignment = TextAnchor.MiddleCenter;
+            _transitionLabel.color = Color.white;
+            _transitionLabel.raycastTarget = false;
+            labelGo.SetActive(false);
         }
 
         private void BuildStars()

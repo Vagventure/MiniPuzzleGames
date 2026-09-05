@@ -5,13 +5,17 @@ using UnityEngine.UI;
 namespace PuzzleGame.UI
 {
     /// <summary>
-    /// The single combined main menu for every mini-game. It IS the level select:
-    /// a top bar (CONTINUE / OPTIONS / QUIT) over one scrollable grid of every level in the
-    /// <see cref="LevelCatalog"/>, grouped by mini-game.
+    /// The menu scene has two pages, built entirely from code:
     ///
-    ///   CONTINUE -> highest unlocked global level (Connect Balls, then Find The Hole, then …)
-    ///   a level   -> jump straight to it (if unlocked / testing-unlocked)
-    ///   OPTIONS   -> sound toggle + reset progress
+    ///   START page   — title + PLAY / OPTIONS / QUIT (the game's front door)
+    ///   LEVEL SELECT — BACK / CONTINUE / OPTIONS top bar over the scrollable level grid
+    ///
+    ///   Start.PLAY        -> open Level Select
+    ///   LevelSelect.BACK   -> back to Start
+    ///   LevelSelect.CONTINUE -> highest unlocked global level (jumps straight into gameplay)
+    ///   a level button     -> jump straight to it (if unlocked / testing-unlocked)
+    ///   OPTIONS (either page) -> sound toggle + reset progress
+    ///   Start.QUIT         -> exit
     ///
     /// Unlock rules (incl. testing overrides) live in <see cref="GameConfig"/> —
     /// set <c>unlockAllLevels</c> or <c>playableLevelsPerChapter</c> on
@@ -19,8 +23,11 @@ namespace PuzzleGame.UI
     /// </summary>
     public class MainMenuController : MonoBehaviour
     {
-        private Text _continueLabel;
+        private GameObject _startPanel;
+        private GameObject _levelSelectPanel;
         private GameObject _optionsPanel;
+
+        private Text _continueLabel;
         private Text _soundLabel;
         private RectTransform _body;
 
@@ -28,11 +35,16 @@ namespace PuzzleGame.UI
         {
             SaveManager.EnsureInitialised();
             BuildUi();
+            ShowStart();
         }
 
         // ------------------------------------------------------------------
         // Button handlers
         // ------------------------------------------------------------------
+
+        public void OnPlay() => ShowLevelSelect();
+
+        public void OnBackToStart() => ShowStart();
 
         public void OnContinue()
         {
@@ -71,8 +83,24 @@ namespace PuzzleGame.UI
         }
 
         // ------------------------------------------------------------------
-        // UI construction
+        // Page switching
         // ------------------------------------------------------------------
+
+        private void ShowStart()
+        {
+            _levelSelectPanel.SetActive(false);
+            _optionsPanel.SetActive(false);
+            _startPanel.SetActive(true);
+        }
+
+        private void ShowLevelSelect()
+        {
+            _startPanel.SetActive(false);
+            _optionsPanel.SetActive(false);
+            _levelSelectPanel.SetActive(true);
+            RefreshContinueLabel();
+            RebuildGrid();
+        }
 
         private void RefreshContinueLabel()
         {
@@ -88,6 +116,10 @@ namespace PuzzleGame.UI
         {
             if (_body != null) LevelSelectView.Build(_body);
         }
+
+        // ------------------------------------------------------------------
+        // UI construction
+        // ------------------------------------------------------------------
 
         private void BuildUi()
         {
@@ -105,31 +137,64 @@ namespace PuzzleGame.UI
 
             var root = canvasGo.transform;
 
-            // background
-            var bg = SharedUI.NewUiObject("Bg", root);
+            BuildStartPanel(root);
+            BuildLevelSelectPanel(root);
+            BuildOptionsPanel(root); // drawn last -> always on top of whichever page is active
+        }
+
+        private void BuildStartPanel(Transform root)
+        {
+            _startPanel = SharedUI.NewUiObject("StartPanel", root);
+            SharedUI.Stretch(_startPanel.GetComponent<RectTransform>());
+
+            var bg = SharedUI.NewUiObject("Bg", _startPanel.transform);
             SharedUI.Stretch(bg.GetComponent<RectTransform>());
             bg.AddComponent<Image>().color = new Color(0.08f, 0.10f, 0.16f, 1f);
 
-            BuildTopBar(root);
+            var title = SharedUI.NewUiObject("Title", _startPanel.transform);
+            var tt = title.AddComponent<Text>();
+            tt.font = SharedUI.LegacyFont();
+            tt.text = "PUZZLE COLLECTION";
+            tt.fontSize = 66;
+            tt.alignment = TextAnchor.MiddleCenter;
+            tt.color = Color.white;
+            var trt = title.GetComponent<RectTransform>();
+            trt.anchorMin = new Vector2(0.1f, 0.72f);
+            trt.anchorMax = new Vector2(0.9f, 0.88f);
+            trt.offsetMin = trt.offsetMax = Vector2.zero;
 
-            // scrolling body (below the top bar)
-            var bodyGo = SharedUI.NewUiObject("Body", root);
-            _body = bodyGo.GetComponent<RectTransform>();
-            _body.anchorMin = new Vector2(0, 0);
-            _body.anchorMax = new Vector2(1, 1);
-            _body.offsetMin = new Vector2(0, 0);
-            _body.offsetMax = new Vector2(0, -280); // reserve top bar height
+            var playBtn = SharedUI.MakeButton("PlayButton", _startPanel.transform, "PLAY", OnPlay);
+            PlaceButtonColumn(playBtn.GetComponent<RectTransform>(), 0);
 
-            LevelSelectView.Build(_body);
+            var optionsBtn = SharedUI.MakeButton("OptionsButton", _startPanel.transform, "OPTIONS", OnOptions);
+            PlaceButtonColumn(optionsBtn.GetComponent<RectTransform>(), 1);
+            optionsBtn.GetComponent<Image>().color = new Color(0.30f, 0.34f, 0.42f, 1f);
 
-            BuildOptionsPanel(root);
-
-            RefreshContinueLabel();
+            var quitBtn = SharedUI.MakeButton("QuitButton", _startPanel.transform, "QUIT", OnQuit);
+            PlaceButtonColumn(quitBtn.GetComponent<RectTransform>(), 2);
+            quitBtn.GetComponent<Image>().color = new Color(0.55f, 0.25f, 0.25f, 1f);
         }
 
-        private void BuildTopBar(Transform root)
+        // 3 buttons stacked vertically, centred on screen
+        private static void PlaceButtonColumn(RectTransform rt, int row)
         {
-            var bar = SharedUI.NewUiObject("TopBar", root);
+            rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0.5f);
+            rt.pivot = new Vector2(0.5f, 0.5f);
+            rt.sizeDelta = new Vector2(560, 130);
+            rt.anchoredPosition = new Vector2(0, 120 - row * 170);
+        }
+
+        private void BuildLevelSelectPanel(Transform root)
+        {
+            _levelSelectPanel = SharedUI.NewUiObject("LevelSelectPanel", root);
+            SharedUI.Stretch(_levelSelectPanel.GetComponent<RectTransform>());
+            _levelSelectPanel.SetActive(false);
+
+            var bg = SharedUI.NewUiObject("Bg", _levelSelectPanel.transform);
+            SharedUI.Stretch(bg.GetComponent<RectTransform>());
+            bg.AddComponent<Image>().color = new Color(0.08f, 0.10f, 0.16f, 1f);
+
+            var bar = SharedUI.NewUiObject("TopBar", _levelSelectPanel.transform);
             var brt = bar.GetComponent<RectTransform>();
             brt.anchorMin = new Vector2(0, 1);
             brt.anchorMax = new Vector2(1, 1);
@@ -152,17 +217,25 @@ namespace PuzzleGame.UI
             trt.sizeDelta = new Vector2(0, 100);
             trt.anchoredPosition = new Vector2(0, -20);
 
+            var backBtn = SharedUI.MakeButton("BackButton", bar.transform, "BACK", OnBackToStart);
+            PlaceInRow(backBtn.GetComponent<RectTransform>(), 0);
+            backBtn.GetComponent<Image>().color = new Color(0.30f, 0.34f, 0.42f, 1f);
+
             var continueBtn = SharedUI.MakeButton("ContinueButton", bar.transform, "CONTINUE", OnContinue);
-            PlaceInRow(continueBtn.GetComponent<RectTransform>(), 0);
+            PlaceInRow(continueBtn.GetComponent<RectTransform>(), 1);
             _continueLabel = continueBtn.GetComponentInChildren<Text>();
 
             var optionsBtn = SharedUI.MakeButton("OptionsButton", bar.transform, "OPTIONS", OnOptions);
-            PlaceInRow(optionsBtn.GetComponent<RectTransform>(), 1);
+            PlaceInRow(optionsBtn.GetComponent<RectTransform>(), 2);
             optionsBtn.GetComponent<Image>().color = new Color(0.30f, 0.34f, 0.42f, 1f);
 
-            var quitBtn = SharedUI.MakeButton("QuitButton", bar.transform, "QUIT", OnQuit);
-            PlaceInRow(quitBtn.GetComponent<RectTransform>(), 2);
-            quitBtn.GetComponent<Image>().color = new Color(0.55f, 0.25f, 0.25f, 1f);
+            // scrolling body (below the top bar)
+            var bodyGo = SharedUI.NewUiObject("Body", _levelSelectPanel.transform);
+            _body = bodyGo.GetComponent<RectTransform>();
+            _body.anchorMin = new Vector2(0, 0);
+            _body.anchorMax = new Vector2(1, 1);
+            _body.offsetMin = new Vector2(0, 0);
+            _body.offsetMax = new Vector2(0, -280); // reserve top bar height
         }
 
         // 3 buttons in a row across the bottom of the top bar
@@ -190,8 +263,8 @@ namespace PuzzleGame.UI
             CentreButton(reset.GetComponent<RectTransform>(), -20);
             reset.GetComponent<Image>().color = new Color(0.8f, 0.3f, 0.25f, 1f);
 
-            var back = SharedUI.MakeButton("BackButton", _optionsPanel.transform, "BACK", OnOptions);
-            CentreButton(back.GetComponent<RectTransform>(), -190);
+            var close = SharedUI.MakeButton("CloseOptionsButton", _optionsPanel.transform, "BACK", OnOptions);
+            CentreButton(close.GetComponent<RectTransform>(), -190);
 
             RefreshSoundLabel();
             _optionsPanel.SetActive(false);

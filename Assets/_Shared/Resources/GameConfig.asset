@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 829a63e79d8bb014d881da732f367fc9, type: 3}
   m_Name: GameConfig
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleGame.Core.GameConfig
-  unlockAllLevels: 0
+  unlockAllLevels: 1
   playableLevelsPerChapter: 0
   showChapterIntro: 1
   skipAfterFailedAttempts: 5

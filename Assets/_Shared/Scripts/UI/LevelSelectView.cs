@@ -7,10 +7,13 @@ using UnityEngine.UI;
 namespace PuzzleGame.UI
 {
     /// <summary>
-    /// Builds one scrollable list of every level in the <see cref="LevelCatalog"/>, grouped by
-    /// mini-game (chapter). Locked levels are dimmed and non-interactable; the level the player
-    /// is currently on is highlighted green and auto-scrolled into view. Tapping an unlocked
-    /// level calls <see cref="LevelFlowController.LoadLevel"/>.
+    /// Builds one continuous scrollable grid of every level in the <see cref="LevelCatalog"/>,
+    /// numbered by GLOBAL running index (1, 2, 3, 4, 5, 6…) — no per-game section headers, so the
+    /// numbering never resets back to 1 partway through. Locked levels are dimmed and
+    /// non-interactable; the level the player is currently on is highlighted green and
+    /// auto-scrolled into view. Tapping an unlocked level calls
+    /// <see cref="LevelFlowController.LoadLevel"/> with its global index, which resolves to
+    /// whichever mini-game's scene actually lives at that position.
     ///
     /// Pure code, no prefab. Call <see cref="Build"/> with a parent RectTransform to fill.
     /// </summary>
@@ -81,20 +84,14 @@ namespace PuzzleGame.UI
             scroll.viewport = viewportRt;
             scroll.content = contentRt;
 
-            // ---- one section per chapter ----
-            GameId currentGame = GameId.None;
-            RectTransform grid = null;
+            // ---- one continuous grid, numbered globally — no per-game section headers ----
+            var levels = catalog.Levels;
             RectTransform currentButton = null;
+            var grid = AddGrid(contentRt);
 
-            foreach (var lvl in catalog.Levels)
+            for (int idx = 0; idx < levels.Count; idx++)
             {
-                if (lvl.Game != currentGame)
-                {
-                    currentGame = lvl.Game;
-                    AddHeader(contentRt, $"{lvl.ChapterName}   (1–{lvl.ChapterLevelCount})");
-                    grid = AddGrid(contentRt);
-                }
-
+                var lvl = levels[idx];
                 var btn = AddLevelButton(grid, lvl, flow, onAnyLevelChosen, lvl.GlobalIndex == currentIndex);
                 if (lvl.GlobalIndex == currentIndex) currentButton = btn;
             }
@@ -105,21 +102,6 @@ namespace PuzzleGame.UI
                 var mover = scrollGo.AddComponent<ScrollToTarget>();
                 mover.Init(scroll, currentButton);
             }
-        }
-
-        private static void AddHeader(RectTransform parent, string text)
-        {
-            var go = SharedUI.NewUiObject("ChapterHeader", parent);
-            var t = go.AddComponent<Text>();
-            t.font = SharedUI.LegacyFont();
-            t.text = text.ToUpperInvariant();
-            t.fontSize = 40;
-            t.fontStyle = FontStyle.Bold;
-            t.color = new Color(1f, 1f, 1f, 0.9f);
-            t.alignment = TextAnchor.MiddleCenter;
-            var le = go.AddComponent<LayoutElement>();
-            le.minHeight = 64;
-            le.preferredHeight = 64;
         }
 
         private static RectTransform AddGrid(RectTransform parent)
@@ -168,7 +150,10 @@ namespace PuzzleGame.UI
             var numGo = SharedUI.NewUiObject("Num", go.transform);
             var num = numGo.AddComponent<Text>();
             num.font = SharedUI.LegacyFont();
-            num.text = unlocked ? lvl.ChapterLevelNumber.ToString() : "-";
+            // global running number (1,2,3,4,5,6,7...) so it keeps counting across games instead
+            // of restarting at 1 for every mini-game — the header below shows which game/slice
+            // this run belongs to.
+            num.text = unlocked ? lvl.GlobalIndex.ToString() : "-";
             num.fontSize = unlocked ? 54 : 40;
             num.fontStyle = isCurrent ? FontStyle.Bold : FontStyle.Normal;
             num.alignment = TextAnchor.MiddleCenter;
